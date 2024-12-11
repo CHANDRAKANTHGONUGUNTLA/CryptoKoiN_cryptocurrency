@@ -1,5 +1,4 @@
 # CryptoKoiN
-
 CryptoKoiN is a cryptocurrency web application that provides user-friendly features for managing cryptocurrency assets, tracking transactions, and visualizing market trends. The application supports both user and admin interfaces with secure functionality and robust data handling using SQL Server and Flask.
 
 ## Project Details
@@ -43,9 +42,21 @@ Below is the updated relational diagram illustrating the relationships between t
 
 
 ## Features
+
+- **Homepage**
+  - The homepage is the entry point of the application, showcasing the following buttons for navigation:
+     - **Login**: For both users and admins to log in.
+     - **Create Account**: Allows users to register.
+     - **Forgot Password**: Users can reset their passwords using their registered email address.
+
 ### User Interface:
-- **User MainMenu**:
-  -  # -------------- M2 ------------------
+- **User Main Menu**:
+  - Central hub for users to manage their cryptocurrency portfolio and transactions.
+  - Features include:
+    - **Portfolio Overview**: Visualize cumulative cryptocurrency holdings and investment trends over time.
+    - **Profitable Coins (24 Hours)**: Identify top-performing cryptocurrencies in the last 24 hours.
+    - **Market Data**: Access real-time price, volume, and trend information for various cryptocurrencies.
+  - Designed for seamless navigation and quick access to critical investment insights.
 
 - **Cryptocurrency Market**:
   - Detailed insights on cryptocurrencies, including market trends, historical data, and performance metrics.
@@ -75,6 +86,13 @@ Below is the updated relational diagram illustrating the relationships between t
   - View a complete history of cryptocurrency transactions.
 - **Profile Management**:
   - View and manage personal account details.
+- **Rewards Program**:
+  - Incentivizes users to engage more with the platform through rewards.
+  - Features include:
+    - **Referral Program**: Earn rewards for inviting new users to join the platform.
+    - **New Cryptocurrency Launch Rewards**: Exclusive bonuses for participating in the launch of new cryptocurrencies.
+  - Encourages user participation and enhances platform loyalty.
+
 
 ### Admin Interface:
 - **Dashboard**:
@@ -259,6 +277,8 @@ Below is the updated relational diagram illustrating the relationships between t
 - **Explanation**:
   - Aggregates transaction values for each user to identify the highest contributors.
   - Orders by total_transaction_value in descending order to highlight top users.
+
+
 
 
 ### Core Functionality:
