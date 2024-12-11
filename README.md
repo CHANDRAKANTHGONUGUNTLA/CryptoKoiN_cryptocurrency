@@ -43,42 +43,19 @@ Below is the updated relational diagram illustrating the relationships between t
 
 ### Transactional Queries:
 1. **Insert a New User**:
-   ```sql
-   INSERT INTO Users (username, password_hash, email, created_at, role) 
-   VALUES ('user1', HASHBYTES('SHA2_256', 'pass123'), 'user1@example.com', GETDATE(), 'customer');
-   ```
 
 2. **Record a Transaction**:
-   ```sql
-   INSERT INTO Transaction_History (transaction_type, quantity, price_at_transaction, transaction_timestamp, crypto_id, user_id, total_amount) 
-   VALUES ('buy', 2, 45000, GETDATE(), 1, 1, 90000);
-   ```
+
 
 3. **Update Wallet Balance**:
-   ```sql
-   UPDATE Wallet SET balance = balance - 90000 WHERE user_id = 1;
-   ```
+
 
 ### Analytical Queries:
 1. **Top Cryptocurrencies by Market Cap**:
-   ```sql
-   SELECT name, symbol, market_cap FROM Cryptocurrency 
-   ORDER BY market_cap DESC;
-   ```
 
 2. **Total Revenue by Day**:
-   ```sql
-   SELECT CAST(transaction_timestamp AS DATE) AS transaction_date, SUM(total_amount) AS daily_revenue 
-   FROM Transaction_History 
-   GROUP BY CAST(transaction_timestamp AS DATE);
-   ```
 
 3. **User Activity Log Count**:
-   ```sql
-   SELECT user_id, COUNT(*) AS activity_count 
-   FROM User_Activity 
-   GROUP BY user_id;
-   ```
 
 ## Features
 
@@ -126,11 +103,46 @@ Below is the updated relational diagram illustrating the relationships between t
   - View and manage cryptocurrency data.
 - **Transaction Analysis**:
   - View and filter user and wallet transactions.
+    
+ 
+## User MainMenu
+
+### **Portfolio Overview**
+![Relational Diagram](./diagrams/relational_diagram.png)
+
+- **Description**:  
+  Displays a graphical representation of the user's cryptocurrency holdings and tracks the total portfolio value over time.
+
+- **Purpose of the Graph**:  
+  - Track cumulative cryptocurrency holdings day-by-day.  
+  - Help users analyze their investment growth or decline.  
+  - Enable users to make informed decisions on future trades.
+
+- **SQL Code**:
+  ```sql
+  SELECT date, 
+         SUM(value) AS cumulative_portfolio_value
+  FROM user_holdings
+  WHERE user_id = ?
+  GROUP BY date
+  ORDER BY date;```
+
+- **Explanation**: 
+
+
+Retrieves daily cryptocurrency holdings for the user.
+Uses SUM(value) to calculate the cumulative portfolio value for each date.
+Data is ordered by date to visualize portfolio trends effectively.
+Insights Users Gain:
+
+Understand how their investments perform over time.
+Identify profitable or unprofitable trends in specific periods.
+## ---
 
 ### Core Functionality:
 - **Data Handling**:
   - Secure storage of user and transaction data using SQL Server.
-  - Data updates from CoinAPI.
+  - Data updates from CoinGeckoAPI.
 - **Visualizations**:
   - Graphical representations of market trends using candlestick charts.
 
@@ -156,7 +168,7 @@ Below is the updated relational diagram illustrating the relationships between t
    - Set up a SQL Server database.
    - Update database connection details in the `config.py` file.
 4. Configure CoinAPI:
-   - Obtain an API key from [CoinAPI](https://www.coinapi.io/).
+   - Obtain an API key from [CoinAPI](https://www.coingeckoapi.io/).
    - Update the API key in the `cryptokoin_api.py` file.
 
 ### Running the Application:
@@ -183,6 +195,9 @@ Below is the updated relational diagram illustrating the relationships between t
 - `/mainmenu/investments` - View investments and profit/loss analysis.
 - `/mainmenu/transactions` - View transaction history.
 - `/mainmenu/account/profile` - View user profile.
+- `/mainmenu/market` - Manage market data.
+- `/details/<coin_id>` - View coin details with candlestick graph.
+- `/mainmenu/rewards` - Referral Program and Launching a new cryptocurrency
 
 ### Admin Endpoints:
 - `/admin_mainmenu` - Admin dashboard.
