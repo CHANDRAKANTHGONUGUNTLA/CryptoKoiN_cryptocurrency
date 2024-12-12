@@ -142,11 +142,12 @@ This architecture ensures a modular, secure, and maintainable approach for handl
 
 ## Key Features and Functionalities
 ### User MainMenu Insights
-![User MainMenu](images/relational_diagram.png)
-#### **Portfolio Overview**
-![](./diagrams/relational_diagram.png)
+![User MainMenu](images/user_Mainmenu.png)
 
-- **Description**:  
+#### **Portfolio Overview**
+![portfolio](images/portfolio_overview.png)
+
+- **Description**:\
   Displays a graphical representation of the user's cryptocurrency holdings and tracks the total portfolio value over time.
 
 - **Purpose of the Graph**:  
@@ -156,12 +157,9 @@ This architecture ensures a modular, secure, and maintainable approach for handl
 
 - **SQL Code**:
   ```sql
-  SELECT date, 
-         SUM(value) AS cumulative_portfolio_value
-  FROM user_holdings
-  WHERE user_id = ?
-  GROUP BY date
-  ORDER BY date;```
+  SELECT cc.image_url, cc.coin_id, cc.coin_symbol, cc.coin_name, th.transaction_type,th.quantity, th.total_amount, th.transaction_timestamp
+  FROM `Transaction_History` th, Crypto_coins cc
+  WHERE th.crypto_id = cc.cryptocoin_id AND th.user_id = %s```
 - **Explanation**: 
   - Retrieves daily cryptocurrency holdings for the user.
   - Uses SUM(value) to calculate the cumulative portfolio value for each date.
@@ -171,7 +169,7 @@ This architecture ensures a modular, secure, and maintainable approach for handl
   - Identify profitable or unprofitable trends in specific periods.
 
 ### **Profitable Coins (24 Hours)**
-![Relational Diagram](./diagrams/relational_diagram.png)
+![Profitable Coins](images/profitable_coins.png)
 
 - **Description**:  
   Highlights the cryptocurrencies with the highest profit percentages in the past 24 hours.
@@ -179,14 +177,12 @@ This architecture ensures a modular, secure, and maintainable approach for handl
   - Identify top-performing cryptocurrencies.
   - Assist users in making buy/sell decisions based on recent performance.
 
-- **SQL Code**:
-  ```sql
-    SELECT coin_id, name, ((current_price - opening_price) / opening_price) * 100 
-    AS profit_percentage
-    FROM coin_market_data
-    WHERE timestamp >= NOW() - INTERVAL 1 DAY
-    ORDER BY profit_percentage DESC
-    LIMIT 5;
+- **Backend Python Code**:
+  ```python
+    u = user()
+    u.tn = 'Crypto_coins'
+    u.getAll()
+    sorted_data = sorted(u.data, key=lambda x: x['price_change_percentage_24h'], reverse=True)
   ```
 
 - **Explanation**:
@@ -198,8 +194,10 @@ This architecture ensures a modular, secure, and maintainable approach for handl
   - Spot opportunities to buy/sell based on the latest market performance.
 
 ## Admin MainMenu Highights
+![admin mainmenu](images/admin_dashboard.png)
+
 ### **User Growth Trends**
-![Relational Diagram](./diagrams/relational_diagram.png)
+![user_growth_trends](images/user_growth_trends.png)
 
 - **Description**:  
   Displays a graph of user registrations, showing how the platform is growing over time.
@@ -208,21 +206,34 @@ This architecture ensures a modular, secure, and maintainable approach for handl
   - Analyze user growth trends over the last 12 months.
   - Understand the impact of campaigns and marketing strategies.
 
-- **SQL Code**:
-  ```sql
-      SELECT MONTH(created_at) AS month, 
-             COUNT(user_id) AS new_users
-      FROM users
-      WHERE created_at >= DATE_SUB(NOW(), INTERVAL 12 MONTH)
-      GROUP BY MONTH(created_at)
-      ORDER BY month;
+- **Python Code**:
+  ```python
+    u = user()
+    u.getAll()
+    data = u.data
+    date_counts = Counter(us['created_at'].date() for us in data if us['role'] == 'user')
+    
+    # Get all dates between the earliest and latest user creation dates
+    start_date = min(date_counts.keys())
+    end_date = max(date_counts.keys())
+    all_dates = [start_date + datetime.timedelta(days=i) for i in range((end_date - start_date).days + 1)]
+    
+    # Accumulate user count over time, filling missing dates with last known value
+    cumsum_dict = {}
+    last_count = 0
+    for date in all_dates:
+        if date in date_counts:
+            last_count += date_counts[date]
+        cumsum_dict[date.strftime("%Y-%m-%d")] = last_count
+    
+    t_users = last_count  
   ```
 - **Explanation**:
   - Retrieves the number of new users registered each day for the past year.
   - Groups data by month to create a clear trend of user growth.
 
 ### **Total Users**
-![Relational Diagram](./diagrams/relational_diagram.png)
+![total_users.png](total_users.png)
 
 - **Description**:  
   Displays the total number of users registered on the platform.
@@ -230,7 +241,7 @@ This architecture ensures a modular, secure, and maintainable approach for handl
 - **SQL Code**:
   ```sql
        SELECT COUNT(*) AS total_users
-       FROM users;
+       FROM user_table;
   ```
 - **Explanation**:
   - Counts all users in the users table to provide the total user count.
@@ -238,16 +249,13 @@ This architecture ensures a modular, secure, and maintainable approach for handl
 
 
 ### **Total Revenue from Transaction Fees**
-![Relational Diagram](./diagrams/relational_diagram.png)
 
 - **Description**:  
   Highlights the total revenue generated from transaction fees.
   
-- **SQL Code**:
-  ```sql
-       SELECT SUM(transaction_fee) AS total_revenue
-       FROM transactions
-       WHERE timestamp >= DATE_SUB(NOW(), INTERVAL 1 MONTH);
+- **Python Code**:
+  ```python
+       t_revenue = sum(float(tr['revenue']) for tr in transactions_list)
   ```
 - **Explanation**:
   - Aggregates transaction fees for all transactions.
@@ -255,62 +263,83 @@ This architecture ensures a modular, secure, and maintainable approach for handl
 
 
 ### **Daily Revenue with Transaction Breakdown**
-![Relational Diagram](./diagrams/relational_diagram.png)
+![daily_revenue_bar_chart.png](daily_revenue_bar_chart.png)
 
 - **Description**:  
   Displays a breakdown of daily revenue trends based on transaction types (buy/sell).
   
 - **SQL Code**:
   ```sql
-      SELECT DATE(timestamp) AS day, 
-             SUM(transaction_fee) AS daily_revenue, 
-             transaction_type
-      FROM transactions
-      GROUP BY day, transaction_type
-      ORDER BY day;  
+    SELECT cc.image_url, ud.username, cc.coin_name, th.transaction_type, th.quantity, th.total_amount, th.tax,                   
+    DATE(th.transaction_timestamp) AS transaction_date
+    FROM `Transaction_History` th 
+    JOIN Crypto_coins cc ON th.crypto_id = cc.cryptocoin_id 
+    JOIN User_data ud ON th.user_id = ud.user_id 
+    ORDER BY th.transaction_timestamp ASC; 
   ```
 - **Explanation**:
   - Groups revenue data by transaction type and day.
   - Helps track which transaction types contribute the most to daily revenue.
 
 ### **Top Cryptocurrencies by Transaction Volume (Pie Chart)**
-![Relational Diagram](./diagrams/relational_diagram.png)
+![pie_chart.png](pie_chart.png)
 
 - **Description**:  
   A pie chart showing the most traded cryptocurrencies based on transaction volume.
-  
-- **SQL Code**:
-  ```sql
-    SELECT coin_id, name, COUNT(*) AS transaction_count
-    FROM transactions
-    GROUP BY coin_id
-    ORDER BY transaction_count DESC
-    LIMIT 10;
+
+- **Python Code**:
+  ```python
+  crypto_data = {}
+    for d in data:
+        if d['coin_name'] in crypto_data.keys():
+            crypto_data[d['coin_name']] = crypto_data[d['coin_name']] + float(d['total_amount'])
+        else:
+            crypto_data[d['coin_name']] = float(d['total_amount'])
+
+    # Process crypto data for pie chart
+    def process_crypto_data(data):
+        sorted_data = sorted(data.items(), key=lambda x: x[1], reverse=True)
+        top5 = sorted_data[:5]
+        others = sorted_data[5:]
+        
+        others_value = sum(value for _, value in others)
+        
+        final_data = top5 + [("Others", others_value)]
+        total_value = sum(value for _, value in final_data)
+        
+        processed_data = [
+            {"name": name, "value": value, "percentage": round((value / total_value) * 100, 2)}
+            for name, value in final_data]
+        
+        return processed_data
+
+    processed_crypto_data = process_crypto_data(crypto_data)
   ```
+  
 - **Explanation**:
+  - data got from the Query used for `Daily Revenue with Transaction Breakdown` is used for this chart.
   - Fetches the top 10 cryptocurrencies by the number of transactions.
   - Groups by coin_id to count the transactions per cryptocurrency.
 
 
 ### **Top Users by Transaction Value**
-![Relational Diagram](./diagrams/relational_diagram.png)
+![top_users.png](images/top_users.png)
 
 - **Description**:  
   Lists the top users based on the total value of their transactions over the time.
   
-- **SQL Code**:
-  ```sql
-    SELECT user_id, SUM(transaction_value) AS total_transaction_value
-    FROM transactions
-    WHERE timestamp >= DATE_SUB(NOW(), INTERVAL 1 MONTH)
-    GROUP BY user_id
-    ORDER BY total_transaction_value DESC
-    LIMIT 5;
+- **Python Code**:
+  ```python
+    user_totals = defaultdict(float)
+    for d in data:
+        user_totals[d['username']] += float(d['total_amount'])
+    
+    top_users_list = [{"username": user, "transaction_amount": amount} for user, amount in user_totals.items()]
+    top_users_list = sorted(top_users_list, key=lambda x: x["transaction_amount"], reverse=True)
   ```
 - **Explanation**:
   - Aggregates transaction values for each user to identify the highest contributors.
   - Orders by total_transaction_value in descending order to highlight top users.
-
 
 ## Detail Feature Explanation
 ### **Homepage**
