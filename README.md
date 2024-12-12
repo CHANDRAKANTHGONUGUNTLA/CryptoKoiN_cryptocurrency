@@ -25,11 +25,11 @@ CryptoKoiN was developed to simplify cryptocurrency management for users while p
 
 Below is the updated relational diagram illustrating the relationships between tables:
 
-![Relational Diagram](images/.png)
+![Relational Diagram](images/CryptoKoin_Relational_Schema)
 
 ### *CryptoKoiN Database*
 
-![Database](./diagrams/CKN_RS.png)
+![Database](images/CKN_RS.png)
 
 ## Credentials per User Role
 
