@@ -416,7 +416,7 @@ This architecture ensures a modular, secure, and maintainable approach for handl
   - Assurance of a secure password recovery process.
 
 ### **User Investment**
-![Relational Diagram](./diagrams/relational_diagram.png)
+![investments](images/investments.png)
 
 - **Description**:  
   The investment page displays the user's current cryptocurrency portfolio, showing an overview of the coins they hold, quantities, and their total portfolio value.
@@ -426,11 +426,10 @@ This architecture ensures a modular, secure, and maintainable approach for handl
 
 - **SQL Code**:
   ```sql
-    SELECT coin_id, name, COUNT(*) AS transaction_count
-    FROM transactions
-    GROUP BY coin_id
-    ORDER BY transaction_count DESC
-    LIMIT 10;
+  SELECT cc.image_url, cc.coin_id, cc.coin_symbol, cc.coin_name, th.transaction_type,th.quantity, th.total_amount, th.transaction_timestamp
+  FROM `Transaction_History` th, Crypto_coins cc
+  WHERE th.crypto_id = cc.cryptocoin_id
+  AND th.user_id = %s
   ```
 - **Explanation**:
   - **Portfolio Value**: Highlights the total value of the user's portfolio, dynamically calculated using the current balance of all investments.
@@ -450,20 +449,19 @@ This architecture ensures a modular, secure, and maintainable approach for handl
   - A "Trade" button can be added for quick actions like buying or selling coins.
 
 ### **Market Overview**
-
+![market.png](images/market.png)
 - **Description**:
   The market page lists cryptocurrencies with key data such as price, 24-hour changes, and a link to detailed views.
 
 - **Purpose of the Template**:
   To provide users with a marketplace to explore various cryptocurrencies and their performance metrics.
 
-- **SQL Code**:
-  ```sql
-    SELECT coin_id, name, COUNT(*) AS transaction_count
-    FROM transactions
-    GROUP BY coin_id
-    ORDER BY transaction_count DESC
-    LIMIT 10;
+- **Python Code**:
+  ```python
+    u = user()
+    u.tn = 'Crypto_coins'
+    u.getAll() 
+    return render_template('market.html', coins= u.data,navigation_items=True)
   ```
 - **Explanation**:
     - **Crypto Table**:
@@ -482,20 +480,25 @@ This architecture ensures a modular, secure, and maintainable approach for handl
   - Option for a "Trade" button to directly transition to trading from this page.
 
 ### **Coin Insights**
-
+![coin Insights](images/coin_insights.png)
 - **Description**:
   The details page gives a comprehensive view of a specific cryptocurrency,       including its price trends and market statistics.
 
 - **Purpose of the Template**:
   To assist users in analyzing a particular cryptocurrency deeply before making trading decisions.
   
-- **SQL Code**:
-  ```sql
-    SELECT coin_id, name, COUNT(*) AS transaction_count
-    FROM transactions
-    GROUP BY coin_id
-    ORDER BY transaction_count DESC
-    LIMIT 10;
+- **Python Code**:
+  ```python
+    u = user()
+    u.tn = 'Crypto_coins'
+    u.getByField('coin_symbol',coin_id)
+    coin = None
+    if len(u.data)>0:   
+        coin = u.data[0]
+    if not coin:
+        return render_template('details.html', message="Coin not found"), 404
+    graph_html = cryptokoin_api.candle_stick_graph(coin)
+    return render_template('details.html', graph_html=graph_html, coin=coin, navigation_items=True)
   ```
 - **Explanation**:
   - **Graph Container**: Displays a candlestick chart for price movements.
@@ -512,7 +515,40 @@ This architecture ensures a modular, secure, and maintainable approach for handl
   - Ensure seamless navigation between this and the trade page for user convenience.
   - Add historical data for advanced analysis.
 
+
+### **Cryptocurrency Trading **
+![trade](images/Trade.png)
+- **Description**:
+The trade page allows users to buy and sell cryptocurrencies within the cryptoKoin platform. It provides a user-friendly interface for selecting cryptocurrencies, entering trade details, and viewing real-time calculations.
+
+- **Purpose of the Template**:
+  - Trade Mode Selection: Users can choose between "Buy" and "Sell" mode using radio buttons. This selection dynamically affects the form behavior and displayed information.
+ 
+- **SQL Query**:
+  ```sql
+  SELECT c.cryptocoin_id, c.coin_symbol, c.coin_name, c.current_price, c.image_url,
+  IFNULL(SUM(CASE WHEN t.transaction_type = 'BUY' THEN t.quantity 
+  WHEN t.transaction_type = 'SELL' THEN -t.quantity ELSE 0 END), 0) AS shares_owned
+  FROM Crypto_coins c LEFT JOIN Transaction_History t ON c.cryptocoin_id = t.crypto_id AND t.user_id = %s
+  GROUP BY c.cryptocoin_id, c.coin_symbol, c.coin_name, c.current_price, c.image_url;
+  ```
+- **Explanation**:
+  - Cryptocurrency Selection: A dropdown menu populated with available cryptocurrencies allows users to choose the coin they want to trade. The dropdown displays relevant data like coin symbol, name, and (for "Sell" mode) the user's current holdings of that coin.
+  - Trade Input: Users enter the number of shares they want to buy or sell in a dedicated input field.
+  - Real-time Calculations: Based on the selected cryptocurrency and entered quantity, the page dynamically calculates and displays the following:
+    -   Total Price: The total cost of the trade (coin price multiplied by quantity).
+    -   CKN Fee (3%): The transaction fee applied by cryptoKoin (3% of the total price).
+    -   Total Amount: The final amount payable (total price plus fee for buying, or total price minus fee for selling).
+  -   Form Submission: Clicking the "Submit" button triggers form validation and sends the trade request to the server for processing.
+  
+- **Insights Users Gain**:
+  -   Easy-to-use interface for buying and selling cryptocurrencies.
+  -   Real-time price and transaction fee calculations for informed decisions.
+  -   Clear distinction between "Buy" and "Sell" modes for clarity.
+
+
 ### **User Transactions **:
+![transactions](images/transactions.png)
 - **Description**: 
   The transactions page lists all trades performed by the user, including buys and sells.
 - **Purpose of the Template**:
@@ -520,11 +556,11 @@ This architecture ensures a modular, secure, and maintainable approach for handl
 
 - **SQL Code**:
   ```sql
-    SELECT coin_id, name, COUNT(*) AS transaction_count
-    FROM transactions
-    GROUP BY coin_id
-    ORDER BY transaction_count DESC
-    LIMIT 10;
+  SELECT cc.image_url,cc.coin_name,th.transaction_type,th.quantity,th.total_amount,th.transaction_timestamp
+  FROM `Transaction_History` th, Crypto_coins cc
+  WHERE th.crypto_id = cc.cryptocoin_id
+  AND th.user_id =%s
+  ORDER BY `th`.`transaction_timestamp` DESC
   ```
 - **Explanation**:
   - **Transaction Table**:
@@ -542,7 +578,7 @@ This architecture ensures a modular, secure, and maintainable approach for handl
   - Add filters for sorting by date or transaction type.
 
  ### **Wallet Deposit Page**:
-
+![wallet.png](images/Wallet.png)
 - **Description**:
   This page allows users to deposit funds into their wallet using credit card details.
 
@@ -550,12 +586,14 @@ This architecture ensures a modular, secure, and maintainable approach for handl
   To enable users to seamlessly add funds to their wallets for trading or investment purposes.
   
 - **SQL Code**:
-  ```sql
-    SELECT coin_id, name, COUNT(*) AS transaction_count
-    FROM transactions
-    GROUP BY coin_id
-    ORDER BY transaction_count DESC
-    LIMIT 10;
+  ```python
+  u = user()
+  u.tn = 'Wallet_Transaction_History'
+  u.fields = []
+  u.getFields()
+  u.createBlank()
+  u.data[0] = dict(zip(u.fields,['Deposit', amount, datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"), user_id]))
+  u.insert()
   ```
 - **Explanation**:
   - **Deposit Form**:
@@ -569,20 +607,22 @@ This architecture ensures a modular, secure, and maintainable approach for handl
   -  "Just like Wallet Deposit, there’s also a page for Wallet Withdrawal to transfer funds back to the user’s bank account."
 
 ### **Account Overview**
-
+![profile](images/profile.png)
 - **Description**:
   The user profile page displays user-specific information, including account details and wallet balance.
 
 - **Purpose of the Template**:
   To provide users with a centralized view of their account information.
 
-- **SQL Code**:
-  ```sql
-    SELECT coin_id, name, COUNT(*) AS transaction_count
-    FROM transactions
-    GROUP BY coin_id
-    ORDER BY transaction_count DESC
-    LIMIT 10;
+- **Python Code**:
+  ```python
+    user_id = session['user']['user_id']
+    u= user()
+    u.getById(user_id)
+    u_details = u.data[0]
+    u_details['username'] = u_details['username'].upper()
+    u_details['created_at'] = u_details['created_at'].strftime("%B %d, %Y") 
+    return render_template('user_profile.html',user = u_details, navigation_items=True)
   ```
 - **Explanation**:
 
@@ -597,7 +637,7 @@ This architecture ensures a modular, secure, and maintainable approach for handl
   - Provide an option for updating profile information or security settings.
 
 ### **Rewards and Referral Program**
-
+![Rewards](images/.rewards.png)
 -   **Referral Program**:\
     The referral program incentivizes users to invite new members to the platform. Each user's **username** serves as their unique referral code. When a new user signs up using the referral code, the following actions occur:
 
@@ -626,7 +666,7 @@ This architecture ensures a modular, secure, and maintainable approach for handl
 
 
 ### Error Management and User Guidance
-
+![error.png](images/error.png)
 1.  **Centralized Error Handling Across the Application**
 
     -   Errors are detected at every stage of user interaction, from login to transactions. The system checks for invalid input formats, insufficient funds, or unauthorized access at each point, ensuring that issues are caught early.
@@ -661,23 +701,6 @@ This architecture ensures a modular, secure, and maintainable approach for handl
   - Graphical representations of market trends using candlestick charts.
 
 
-## SQL Queries
-
-### Transactional Queries:
-1. **Insert a New User**:
-
-2. **Record a Transaction**:
-
-
-3. **Update Wallet Balance**:
-
-
-### Analytical Queries:
-1. **Top Cryptocurrencies by Market Cap**:
-
-2. **Total Revenue by Day**:
-
-3. **User Activity Log Count**:
 ## Application Setup Guide
 
 ### Prerequisites:
