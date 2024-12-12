@@ -25,21 +25,25 @@ CryptoKoiN was developed to simplify cryptocurrency management for users while p
 
 Below is the updated relational diagram illustrating the relationships between tables:
 
-![Relational Diagram](images/CryptoKoin_Relational_Schema)
+![Relational Diagram](images/CryptoKoin_Relational_Schema.png)
 
 ### *CryptoKoiN Database*
 
 ![Database](images/CKN_RS.png)
 
-## Credentials per User Role
+**Purpose:**
 
-| Role       | Username     | Password   |
-|------------|--------------|------------|
-| Customer   | srikanth        | 123456    |
-| Admin      | chandu       | 123456   |
+This database serves as the foundation for the CryptoCoin exchange platform, a comprehensive platform designed to facilitate the buying, selling, and trading of various cryptocurrencies. It houses essential data related to users, transactions, cryptocurrency information, and wallet activities.
 
+**Database Structure**:\
+The database comprises five tables, each with specific fields to store crucial information:
 
-
+-   **Transaction_History:** Records of cryptocurrency buy, sell, and transfer transactions.
+-   **User_Activity:** User login and logout activity.
+-   **User_Data:** User information, including personal details and wallet balances.
+-   **Crypto_Coins:** Information about various cryptocurrencies, such as prices, market cap, and historical data.
+-   **Wallet_Transaction_History:** Records of deposits and withdrawals to user wallets.
+---
 ## Features
 
 - **Homepage**
@@ -48,7 +52,7 @@ Below is the updated relational diagram illustrating the relationships between t
      - **Create Account**: Allows users to register.
      - **Forgot Password**: Users can reset their passwords using their registered email address.
 
-### User Interface:
+#### User Interface:
 - **User Main Menu**:
   - Central hub for users to manage their cryptocurrency portfolio and transactions.
   - Features include:
@@ -93,7 +97,7 @@ Below is the updated relational diagram illustrating the relationships between t
   - Encourages user participation and enhances platform loyalty.
 
 
-### Admin Interface:
+#### Admin Interface:
 - **Dashboard**:
   - User growth statistics.
   - Daily transaction revenue.
@@ -120,7 +124,6 @@ In this architecture, three key Python files are responsible for managing databa
         -   `tryLogin`: Handles user login by validating credentials against the database.
           
 2.  **baseObject.py**
-
     -   **Purpose**: Manages the basic database operations such as connecting to the database, executing CRUD operations, and handling database errors.
     -   **Key Features**:
         -   `setup`: Initializes the database connection and prepares the object for CRUD operations.
@@ -128,7 +131,6 @@ In this architecture, three key Python files are responsible for managing databa
         -   `getAll`, `getById`, `getByField`: Fetches records from the database based on various conditions.
           
 3.  **cryptokoin_apis.py**
-
     -   **Purpose**: Provides functions to interact with cryptocurrency APIs (like CoinGecko and Yahoo Finance) and manage cryptocurrency-related data.
     -   **Key Features**:
         -   `fetch_current_prices`: Retrieves real-time cryptocurrency prices from the CoinGecko API.
@@ -138,11 +140,11 @@ In this architecture, three key Python files are responsible for managing databa
 This architecture ensures a modular, secure, and maintainable approach for handling user and database interactions, while also offering flexibility for integrating external APIs.
 
 
- # Title -------------- M3 ------------------
-## User MainMenu Highights
-
-### **Portfolio Overview**
-![Relational Diagram](./diagrams/relational_diagram.png)
+## Key Features and Functionalities
+### User MainMenu Insights
+![User MainMenu](images/relational_diagram.png)
+#### **Portfolio Overview**
+![](./diagrams/relational_diagram.png)
 
 - **Description**:  
   Displays a graphical representation of the user's cryptocurrency holdings and tracks the total portfolio value over time.
@@ -623,7 +625,17 @@ This architecture ensures a modular, secure, and maintainable approach for handl
 4.  **Potential Errors and Examples**
 
     -   Errors may include login failures due to incorrect credentials, insufficient balance during transactions, unauthorized access to restricted pages, or session timeouts. These errors prevent users from performing unauthorized actions or losing data integrity. Examples: Invalid email format, selling more than holdings, session timeout.
-  
+
+
+
+## Credentials per User Role
+
+| Role       | Username     | Password   |
+|------------|--------------|------------|
+| Customer   | srikanth        | 123456    |
+| Admin      | chandu       | 123456   |
+
+
 
 
 
