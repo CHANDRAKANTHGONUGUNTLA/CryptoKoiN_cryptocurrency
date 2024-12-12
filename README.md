@@ -21,16 +21,15 @@ CryptoKoiN was developed to simplify cryptocurrency management for users while p
 - **Customer**: Facilitate secure and efficient cryptocurrency management.
 - **Admin**: Ensure system integrity and monitor overall application performance.
 
-## Relational Diagram
-# -------------- M1 ------------------
+## *Relational Schema*
 
 Below is the updated relational diagram illustrating the relationships between tables:
 
-![Relational Diagram](./diagrams/relational_diagram.png)
+![Relational Diagram](images/.png)
 
-### ER Diagram (Optional)
+### *CryptoKoiN Database*
 
-![ER Diagram](./diagrams/er_diagram.png)
+![Database](./diagrams/CKN_RS.png)
 
 ## Credentials per User Role
 
