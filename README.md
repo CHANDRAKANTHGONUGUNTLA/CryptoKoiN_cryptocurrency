@@ -93,7 +93,7 @@ This architecture ensures a modular, secure, and maintainable approach for handl
 
 
 ## Key Features and Functionalities
-### User MainMenu Insights
+### User MainMenu Insights & Analytics
 ![User MainMenu](images/user_Mainmenu.png)
 
 #### **Portfolio Overview**
@@ -145,9 +145,10 @@ This architecture ensures a modular, secure, and maintainable approach for handl
   - Quickly identify profitable cryptocurrencies to take action.
   - Spot opportunities to buy/sell based on the latest market performance.
 
-## Admin MainMenu Highights
+## Admin Dashboard  
 ![admin mainmenu](images/admin_dashboard.png)
 
+- **Employ data analytics techniques to monitor user growth, cryptocurrency market trends, and daily revenue metrics.**
 ### **User Growth Trends**
 ![user_growth_trends](images/user_growth_trends.png)
 
@@ -698,7 +699,10 @@ The trade page allows users to buy and sell cryptocurrencies within the cryptoKo
 - `templates/`: HTML templates for the application.
 - `static/`: CSS, JavaScript, and image files.
 - `app.py`: Main Flask application file.
-- `config.py`: Configuration file for database and API keys.
+- `config.yml`: Configuration file for database and API keys.
+- `test.ipynb`: Query testing file
+- `user_ckn.py`: Data handling.
+- `baseObject.py`: Data handling.
 - `cryptokoin_api.py`: API integration and data handling.
 
 ## APIs and Endpoints
