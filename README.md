@@ -637,7 +637,7 @@ The trade page allows users to buy and sell cryptocurrencies within the cryptoKo
   - Provide an option for updating profile information or security settings.
 
 ### **Rewards and Referral Program**
-![Rewards](images/.rewards.png)
+![Rewards](images/rewards.png)
 -   **Referral Program**:\
     The referral program incentivizes users to invite new members to the platform. Each user's **username** serves as their unique referral code. When a new user signs up using the referral code, the following actions occur:
 
@@ -656,6 +656,14 @@ The trade page allows users to buy and sell cryptocurrencies within the cryptoKo
 -   The referral system ensures transparency and fairness by tying rewards directly to user activity.
 -   The new cryptocurrency launch feature adds diversity to the market offerings, encouraging users to stay engaged.
 
+### Logo Functionality
+![Logo](images/logo_hover.png)
+  -   **Prominent Placement:** The CryptoKoiN logo is strategically positioned in the top right corner of the taskbar, ensuring its visibility across all pages.
+  -   **Interactive Design:** The logo is designed to be clickable. When a user hovers over it, the color changes from #1f4c76 to yellow, indicating its interactive nature.
+  -   **User-Centric Redirection:** Upon clicking the logo, users are redirected to appropriate starting points:
+    -   **Logged-in Users:** User dashboard or admin dashboard.
+    -   **Unauthenticated Users:** Homepage for login or registration.
+  - **Seamless User Experience:** The logo provides a consistent way for users to navigate back to the main sections of the website, enhancing usability.
 
 ### **User Session and Security Management**
 
@@ -679,6 +687,7 @@ The trade page allows users to buy and sell cryptocurrencies within the cryptoKo
 4.  **Potential Errors and Examples**
 
     -   Errors may include login failures due to incorrect credentials, insufficient balance during transactions, unauthorized access to restricted pages, or session timeouts. These errors prevent users from performing unauthorized actions or losing data integrity. Examples: Invalid email format, selling more than holdings, session timeout.
+
 
 
 
