@@ -47,68 +47,20 @@ The database comprises five tables, each with specific fields to store crucial i
 ## Features
 
 - **Homepage**
-  - The homepage is the entry point of the application, showcasing the following buttons for navigation:
-     - **Login**: For both users and admins to log in.
-     - **Create Account**: Allows users to register.
-     - **Forgot Password**: Users can reset their passwords using their registered email address.
-
-#### User Interface:
-- **User Main Menu**:
-  - Central hub for users to manage their cryptocurrency portfolio and transactions.
-  - Features include:
-    - **Portfolio Overview**: Visualize cumulative cryptocurrency holdings and investment trends over time.
-    - **Profitable Coins (24 Hours)**: Identify top-performing cryptocurrencies in the last 24 hours.
-    - **Market Data**: Access real-time price, volume, and trend information for various cryptocurrencies.
-  - Designed for seamless navigation and quick access to critical investment insights.
-
-- **Cryptocurrency Market**:
-  - Detailed insights on cryptocurrencies, including market trends, historical data, and performance metrics.
-  - Highlight top gainers and losers over various timeframes (e.g., daily, weekly).
-  - Real-time data visualization with sortable and filterable tables.
-- **Trading**:
-  - Purchase cryptocurrencies directly using wallet balance.
-  - Real-time price tracking and wallet deductions.
-  - Confirmation prompts and transaction summaries for user verification.
-  - Instant sell options with real-time calculations.
-  - Wallet balance updates post transaction.
-    
-- **Currency Detailing**:
-  - Access price trends and volatility reports for individual cryptocurrencies.
-  - Time-series analysis over multiple durations (daily, monthly, yearly).
-  - Interactive Charts: Utilize candlestick and line charts for in-depth trend analysis.
-  - Adjustable time intervals for personalized insights.
-- **Wallet Management**:
-  - View wallet balance.
-  - Withdraw funds to a bank account.
-  - Deposit funds from a bank account/cards.
-  - View wallet transaction history.
-- **Cryptocurrency Investments**:
-  - View details of owned cryptocurrencies.
-  - Analyze profit and loss.
-- **Transaction Management**:
-  - View a complete history of cryptocurrency transactions.
-- **Profile Management**:
-  - View and manage personal account details.
-- **Rewards Program**:
-  - Incentivizes users to engage more with the platform through rewards.
-  - Features include:
-    - **Referral Program**: Earn rewards for inviting new users to join the platform.
-    - **New Cryptocurrency Launch Rewards**: Exclusive bonuses for participating in the launch of new cryptocurrencies.
-  - Encourages user participation and enhances platform loyalty.
-
-
-#### Admin Interface:
-- **Dashboard**:
-  - User growth statistics.
-  - Daily transaction revenue.
-  - Top users by transaction volume.
-  - Cryptocurrency distribution analysis.
-- **User Management**:
-  - View and manage user accounts.
-- **Market Management**:
-  - View and manage cryptocurrency data.
-- **Transaction Analysis**:
-  - View and filter user and wallet transactions.
+- **User Main Menu**
+- **Cryptocurrency Market**
+- **Trading**
+- **Currency Detailing**
+- **Wallet Management**
+- **Cryptocurrency Investments**
+- **Transaction Management**
+- **Profile Management**
+- **Rewards Program**
+  
+- **Admin Dashboard**
+- **User Management**
+- **Market Management**
+- **Transaction Analysis**
 
 
 ## Database Query Management 
@@ -155,7 +107,7 @@ This architecture ensures a modular, secure, and maintainable approach for handl
   - Help users analyze their investment growth or decline.  
   - Enable users to make informed decisions on future trades.
 
-- **SQL Code**:
+- **SQL Query**:
   ```sql
   SELECT cc.image_url, cc.coin_id, cc.coin_symbol, cc.coin_name, th.transaction_type,th.quantity, th.total_amount, th.transaction_timestamp
   FROM `Transaction_History` th, Crypto_coins cc
@@ -238,7 +190,7 @@ This architecture ensures a modular, secure, and maintainable approach for handl
 - **Description**:  
   Displays the total number of users registered on the platform.
   
-- **SQL Code**:
+- **SQL Query**:
   ```sql
        SELECT COUNT(*) AS total_users
        FROM user_table;
@@ -268,7 +220,7 @@ This architecture ensures a modular, secure, and maintainable approach for handl
 - **Description**:  
   Displays a breakdown of daily revenue trends based on transaction types (buy/sell).
   
-- **SQL Code**:
+- **SQL Query**:
   ```sql
     SELECT cc.image_url, ud.username, cc.coin_name, th.transaction_type, th.quantity, th.total_amount, th.tax,                   
     DATE(th.transaction_timestamp) AS transaction_date
@@ -424,7 +376,7 @@ This architecture ensures a modular, secure, and maintainable approach for handl
 - **Purpose of the Template**:
   To deliver a seamless and intuitive interface for users to manage their cryptocurrency investments.
 
-- **SQL Code**:
+- **SQL Query**:
   ```sql
   SELECT cc.image_url, cc.coin_id, cc.coin_symbol, cc.coin_name, th.transaction_type,th.quantity, th.total_amount, th.transaction_timestamp
   FROM `Transaction_History` th, Crypto_coins cc
@@ -554,7 +506,7 @@ The trade page allows users to buy and sell cryptocurrencies within the cryptoKo
 - **Purpose of the Template**:
   To provide users with a history of their transactions, helping them track their activity and analyze past trades.
 
-- **SQL Code**:
+- **SQL Query**:
   ```sql
   SELECT cc.image_url,cc.coin_name,th.transaction_type,th.quantity,th.total_amount,th.transaction_timestamp
   FROM `Transaction_History` th, Crypto_coins cc
@@ -585,7 +537,7 @@ The trade page allows users to buy and sell cryptocurrencies within the cryptoKo
 - **Purpose of the Template**:
   To enable users to seamlessly add funds to their wallets for trading or investment purposes.
   
-- **SQL Code**:
+- **SQL Query**:
   ```python
   u = user()
   u.tn = 'Wallet_Transaction_History'
