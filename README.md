@@ -343,7 +343,7 @@ This architecture ensures a modular, secure, and maintainable approach for handl
 
 ## Detail Feature Explanation
 ### **Homepage**
-![Relational Diagram](./diagrams/relational_diagram.png)
+![homepage](images/homepage.png)
 
 - **Description**:  
   The homepage acts as the starting point for the CryptoKoin platform, offering navigation to key functionalities like login, sign-up, and password reset.
@@ -359,7 +359,7 @@ This architecture ensures a modular, secure, and maintainable approach for handl
   - Users select **Log In**, **Sign Up**, or **Reset Password** to proceed to specific functionalities.
 
 ### **Login**
-![Relational Diagram](./diagrams/relational_diagram.png)
+![Login](images/login.png)
 
 - **Description**:  
   This page allows users to authenticate themselves by entering a username and password.
@@ -367,11 +367,6 @@ This architecture ensures a modular, secure, and maintainable approach for handl
   - Validate user credentials against stored data.
   - Redirect valid users to their respective dashboard (user or admin).
   - Start user session tracking for activity monitoring.
-  
-- **SQL Code**:
-  ```sql
-  
-  ```
 - **Explanation**:
   - The `username` and `password` fields submitted by the user are captured via `request.form`.
   - The SQL query checks if a matching username-password pair exists in the users table.
@@ -388,17 +383,13 @@ This architecture ensures a modular, secure, and maintainable approach for handl
   - Role-based redirection ensures proper navigation.
 
 ### **Create Account**
-![Relational Diagram](./diagrams/relational_diagram.png)
+![create_account.png](images/create_account.png)
 
 - **Description**:  
   This page enables new users to sign up by entering required details like username, email, and password.
 - **Purpose**:
   - Add a new user to the platform's database.
   - Ensure input validation and prevent duplicate accounts.
-- **SQL Code**:
-  ```sql
-  
-  ```
 - **Explanation**:
   - User input (username, email, password, and optional referral_code) is captured via request.form.
   - A check is performed to ensure the username or email doesn't already exist.
@@ -409,7 +400,7 @@ This architecture ensures a modular, secure, and maintainable approach for handl
   - Confidence in a secure and validated sign-up process.
 
 ### **Reset Password**
-![Relational Diagram](./diagrams/relational_diagram.png)
+![reset_password](images/reset_password.png)
 
 - **Description**:  
   Allows users to reset their password by verifying their username and email.
@@ -417,18 +408,12 @@ This architecture ensures a modular, secure, and maintainable approach for handl
 - **Purpose**:
   - Update a user’s password securely.
   - Redirect the user to the login page after successful reset.
-- **SQL Code**:
-  ```sql
-  
-  ```
 - **Explanation**:
   - User input (username, email, and new_password) is captured via request.form.
   - The SQL query verifies the existence of the username-email combination before updating the password.
   - On successful reset, the user is redirected to the **Login Page**.
-
 - **Insights Users Gain**:
   - Assurance of a secure password recovery process.
-
 
 ### **User Investment**
 ![Relational Diagram](./diagrams/relational_diagram.png)
