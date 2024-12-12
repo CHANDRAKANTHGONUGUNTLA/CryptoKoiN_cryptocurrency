@@ -108,7 +108,7 @@ Below is the updated relational diagram illustrating the relationships between t
   - View and filter user and wallet transactions.
 
 
-## Database Query Management Using `user.py`, `base.py`, and `cryptokoin_api.py`
+## Database Query Management 
 
 In this architecture, three key Python files are responsible for managing database queries and external API interactions: `user.py`, `base.py`, and `cryptokoin_api.py`. These files streamline and centralize database operations and provide secure handling of queries while interacting with external services like CoinGecko for cryptocurrency data.
 
@@ -400,14 +400,14 @@ This architecture ensures a modular, secure, and maintainable approach for handl
   - Assurance of a secure password recovery process.
 
 
-### **Investment Page**
+### **User Investment**
 ![Relational Diagram](./diagrams/relational_diagram.png)
 
 - **Description**:  
   The investment page displays the user's current cryptocurrency portfolio, showing an overview of the coins they hold, quantities, and their total portfolio value.
 
 - **Purpose of the Template**:
-  To provide users with an organized view of their investments, enabling them to see the performance of their portfolio at a glance.
+  To deliver a seamless and intuitive interface for users to manage their cryptocurrency investments.
 
 - **SQL Code**:
   ```sql
@@ -434,7 +434,7 @@ This architecture ensures a modular, secure, and maintainable approach for handl
   - Option to link to a "Details" or "Market" page for deeper insights into each coin.
   - A "Trade" button can be added for quick actions like buying or selling coins.
 
-### **Market Page**
+### **Market Overview**
 
 - **Description**:
   The market page lists cryptocurrencies with key data such as price, 24-hour changes, and a link to detailed views.
@@ -461,12 +461,12 @@ This architecture ensures a modular, secure, and maintainable approach for handl
 - **Insights Users Gain**:
   - Real-time performance metrics of cryptocurrencies.
   - Links to detailed data for better-informed trading decisions.
-
+  - Enables real-time tracking of cryptocurrency trends to make informed trading decisions.
 - **Notes**:
   - Provide filters for sorting (e.g., by price or market cap).
   - Option for a "Trade" button to directly transition to trading from this page.
 
-### **Details Page**
+### **Coin Insights**
 
 - **Description**:
   The details page gives a comprehensive view of a specific cryptocurrency,       including its price trends and market statistics.
@@ -497,7 +497,7 @@ This architecture ensures a modular, secure, and maintainable approach for handl
   - Ensure seamless navigation between this and the trade page for user convenience.
   - Add historical data for advanced analysis.
 
-### **Transactions Page**:
+### **User Transactions **:
 - **Description**: 
   The transactions page lists all trades performed by the user, including buys and sells.
 - **Purpose of the Template**:
@@ -553,7 +553,7 @@ This architecture ensures a modular, secure, and maintainable approach for handl
 - **Notes**:
   -  "Just like Wallet Deposit, there’s also a page for Wallet Withdrawal to transfer funds back to the user’s bank account."
 
-### **User Profile Page**
+### **Account Overview**
 
 - **Description**:
   The user profile page displays user-specific information, including account details and wallet balance.
@@ -581,8 +581,28 @@ This architecture ensures a modular, secure, and maintainable approach for handl
   - Include links for resetting passwords and recharging wallets.
   - Provide an option for updating profile information or security settings.
 
+### **Rewards and Referral Program**
 
-### **User Login Activity and Session Management**
+-   **Referral Program**:\
+    The referral program incentivizes users to invite new members to the platform. Each user's **username** serves as their unique referral code. When a new user signs up using the referral code, the following actions occur:
+
+    1.  The existing user who referred them gets **credited with 1 referral** in their account.
+    2.  Referral counts are dynamically updated for the referrer, enabling users to track their referral progress in real time.
+    3.  Additional rewards or bonuses may be linked to milestones in the referral count, encouraging active participation.
+-   **New Cryptocurrency Launch**:\
+    The platform supports the launch of new cryptocurrencies. This feature allows the platform to:
+
+    1.  Introduce new coins into the market with detailed pages for each coin, including their performance metrics and price trends.
+    2.  Offer users an opportunity to explore and invest in early-stage cryptocurrencies.
+    3.  Ensure that newly launched coins are prominently displayed, creating visibility and driving initial traction.
+
+**Notes**:
+
+-   The referral system ensures transparency and fairness by tying rewards directly to user activity.
+-   The new cryptocurrency launch feature adds diversity to the market offerings, encouraging users to stay engaged.
+
+
+### **User Session and Security Management**
 
 1.  **Tracking User Login and Session Duration**: Captures login time, session start, and session duration in the database for security and activity tracking.
 2.  **Session Timeout Management**: Ensures user sessions automatically expire after 30 minutes of inactivity, preventing unauthorized access.
@@ -590,8 +610,7 @@ This architecture ensures a modular, secure, and maintainable approach for handl
 4.  **Database Structure for User Activity**: Utilizes the `user_activity` table to store detailed user login/logout information and track session lengths.
 
 
-### Error Handling and User Feedback
-
+### Error Management and User Guidance
 
 1.  **Centralized Error Handling Across the Application**
 
@@ -605,6 +624,9 @@ This architecture ensures a modular, secure, and maintainable approach for handl
 4.  **Potential Errors and Examples**
 
     -   Errors may include login failures due to incorrect credentials, insufficient balance during transactions, unauthorized access to restricted pages, or session timeouts. These errors prevent users from performing unauthorized actions or losing data integrity. Examples: Invalid email format, selling more than holdings, session timeout.
+  
+
+
 
 ### Core Functionality:
 - **Data Handling**:
@@ -631,7 +653,7 @@ This architecture ensures a modular, secure, and maintainable approach for handl
 2. **Total Revenue by Day**:
 
 3. **User Activity Log Count**:
-## Setup Instructions
+## Application Setup Guide
 
 ### Prerequisites:
 - Python (3.8 or higher)
